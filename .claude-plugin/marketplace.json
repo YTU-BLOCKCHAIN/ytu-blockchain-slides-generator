@@ -1,18 +1,24 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "frontend-slides",
-  "description": "Create stunning, animation-rich HTML presentations from scratch or by converting PowerPoint files.",
+  "name": "ytu-blockchain-slides",
+  "description": "YTÜ Blockchain Kulübü'nün tek deck tasarım sistemi.",
   "owner": {
-    "name": "zarazhangrui",
-    "url": "https://github.com/zarazhangrui"
+    "name": "YTU-BLOCKCHAIN",
+    "url": "https://github.com/YTU-BLOCKCHAIN"
   },
   "plugins": [
     {
-      "name": "frontend-slides",
-      "description": "Zero-dependency HTML presentation generator with safe presets, bold template-library styles, PPT conversion, and anti-AI-slop design philosophy.",
-      "source": "./plugins/frontend-slides",
+      "name": "ytu-blockchain-slides",
+      "description": "Kulüp deck'lerini tek, kilitli marka tasarım sisteminden üretir. Stil seçimi yok; her sunum aynı görünür.",
+      "source": "./plugins/ytu-blockchain-slides",
       "category": "productivity",
-      "tags": ["presentations", "slides", "html", "design", "powerpoint", "templates"]
+      "tags": [
+        "sunum",
+        "slides",
+        "html",
+        "tasarim-sistemi",
+        "ytu-blockchain"
+      ]
     }
   ]
 }

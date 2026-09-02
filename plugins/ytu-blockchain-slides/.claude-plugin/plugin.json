@@ -1,0 +1,20 @@
+{
+  "name": "ytu-blockchain-slides",
+  "version": "1.0.0",
+  "description": "YTÜ Blockchain Kulübü deck sistemi. Tek marka tasarımı, stil seçimi yok.",
+  "skills": "./skills/",
+  "author": {
+    "name": "YTU-BLOCKCHAIN",
+    "url": "https://github.com/YTU-BLOCKCHAIN"
+  },
+  "homepage": "https://github.com/YTU-BLOCKCHAIN/ytu-blockchain-slides",
+  "repository": "https://github.com/YTU-BLOCKCHAIN/ytu-blockchain-slides",
+  "license": "MIT",
+  "keywords": [
+    "sunum",
+    "slides",
+    "html",
+    "tasarim-sistemi",
+    "ytu-blockchain"
+  ]
+}
