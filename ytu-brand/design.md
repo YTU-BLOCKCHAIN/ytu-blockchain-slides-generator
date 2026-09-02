@@ -48,6 +48,16 @@ olabilir, ama içerik asla yeniden akmaz.
 
 Bu yüzden ölçülerde `vw`, `vh`, `clamp()` kullanılmaz — hepsi sabit `px`.
 
+### Letterbox rengi
+
+Ekran oranı 16:9 tutmadığında yanlarda (ya da altta/üstte) boşluk kalır. Bu
+boşluk **aktif slaytın yüzey rengine eşitlenir**; sabit koyu bırakılırsa mavi
+bir slayt ekranın ortasında duran bir dikdörtgen gibi görünür ve deck "tam
+ekran değil" hissi verir.
+
+Deck denetleyicisi slayt değiştikçe `--stage-bg` ve `--slide-bg` değişkenlerini
+günceller. Örnek uygulama: `examples/ornek-deck.html`.
+
 > CSS'te `transform: scale(calc(100cqw / 1920))` **yazma**. Uzunluğu sayıya
 > bölmek yine uzunluk verir, `scale()` sayı bekler, kural sessizce yok sayılır
 > ve sahne 1:1 render edilip kırpılır. Ölçek JavaScript ile hesaplanır.
@@ -128,11 +138,11 @@ Sahne 1920×1080 olduğu için hepsi sabit px.
 
 | Sınıf | Punto | Satır | Kullanım |
 |---|---|---|---|
-| `.d-hero` | 176 | 0.86 | Yalnız kapak. Deck'te bir kez. |
-| `.d-title` | 128 | 0.88 | Kapanış. |
-| `.d-chapter` | 104 | 0.90 | Bölüm ayracı. |
-| `.d-headline` | 68 | 0.94 | İçerik slaytı başlığı. |
-| `.d-subhead` | 42 | 1.00 | Slayt içi alt başlık. |
+| `.d-hero` | 176 | 1.10 | Yalnız kapak. Deck'te bir kez. |
+| `.d-title` | 128 | 1.10 | Kapanış. |
+| `.d-chapter` | 104 | 1.12 | Bölüm ayracı. |
+| `.d-headline` | 68 | 1.14 | İçerik slaytı başlığı. |
+| `.d-subhead` | 42 | 1.18 | Slayt içi alt başlık. |
 | `.lead` | 34 | 1.35 | Giriş cümlesi. En fazla 24 karakter genişlik. |
 | `.body` | 26 | 1.50 | Gövde. En fazla 34 karakter genişlik. |
 | `.small` | 20 | 1.45 | İkincil metin, tablo hücresi. |
@@ -140,6 +150,23 @@ Sahne 1920×1080 olduğu için hepsi sabit px.
 
 Ara punto uydurma. Bir metin sığmıyorsa punto düşürülmez — **metin kısaltılır
 ya da slayt bölünür**.
+
+### Satır yüksekliği neden bu kadar açık
+
+Display satır yükseklikleri Türkçeye göre belirlendi, estetiğe göre değil.
+Fontun dikey sınırları (em): büyük harf tepesi 0.823, İ noktası ve Ğ breve
+tepesi 1.000, Ş/Ç sedilla dibi −0.235.
+
+Daha sıkı değerlerde bir satırın sedillası alttaki satırın harfine giriyor:
+"BAŞLANGIÇ / GÜVENLİĞİ" 1.06'da çakışıyor, 1.10'da temizleniyor. Değerler
+ölçülerek bulundu — teorik en kötü durum 1.235 isterdi ama gerçek metinde
+sedilla ile aksan aynı x konumuna nadiren denk gelir.
+
+**Bu değerleri düşürme.** Bir başlık fazla açık duruyorsa satırı yeniden böl,
+satır yüksekliğini kısma.
+
+Kenar durum: bir satır Ç/Ş ile bitip alttaki satırda tam o hizada Ğ/İ/Ü varsa
+yine değebilir. Çözümü yine satırı yeniden bölmektir.
 
 ## Izgara
 

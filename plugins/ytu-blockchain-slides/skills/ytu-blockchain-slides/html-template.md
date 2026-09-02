@@ -138,10 +138,24 @@ Every presentation must include:
    - Mouse wheel navigation
    - Optional progress indicator or page count, kept outside the slide stage
 
-2. **Stage Scaling** — For fixed 16:9 presentation behavior:
-   - Keep all slides at 1920×1080 inside `.deck-stage`
-   - Scale the whole stage with one transform
-   - Letterbox/pillarbox as needed; never reflow slide content per device
+2. **Sahne Ölçekleme** — Sabit 16:9 davranışı için:
+   - Bütün slaytlar `.deck-stage` içinde 1920×1080 kalır
+   - Sahne tek bir transform ile ölçeklenir
+   - Letterbox/pillarbox olabilir; içerik cihaza göre yeniden akmaz
+   - **Letterbox rengi aktif slaytın yüzeyine eşitlenir.** Sabit koyu
+     bırakılırsa mavi slayt ekranın ortasında bir dikdörtgen gibi görünür:
+
+   ```js
+   function surfaceOf(slide) {
+     if (slide.classList.contains('stage--signal')) return 'var(--signal)';
+     if (slide.classList.contains('stage--deep')) return 'var(--deep)';
+     return 'var(--void)';
+   }
+   // slayt her degistiginde:
+   var surface = surfaceOf(slides[index]);
+   document.documentElement.style.setProperty('--stage-bg', surface);
+   document.documentElement.style.setProperty('--slide-bg', surface);
+   ```
 
 3. **İlerleme Çubuğu** — `.prog` segmentlerini data niteliklerinden kurar:
 

@@ -296,12 +296,31 @@
      Görünürlük `.active`/`.visible` ile yönetilir, `display` ile değil:
      sonradan gelen layout kuralları display'i ezip tüm slaytları aynı anda
      görünür yapabilir. */
+  /* --- Letterbox rengi ----------------------------------------------------
+     Sahne 16:9 sabit olduğu için ekran oranı tutmadığında yanlarda (ya da
+     altta/üstte) boşluk kalır. Bu boşluk sabit koyu bırakılırsa mavi bir
+     slayt ekranın ortasında duran bir dikdörtgen gibi görünür — "tam
+     genişlik değil" hissi buradan gelir.
+
+     Boşluğu aktif slaytın yüzey rengine eşitlemek sorunu çözer: mavi
+     slaytta bütün pencere maviye döner, slayt kenardan kenara gider. */
+  function surfaceOf(slide) {
+    if (slide.classList.contains('stage--signal')) return 'var(--signal)';
+    if (slide.classList.contains('stage--deep')) return 'var(--deep)';
+    return 'var(--void)';
+  }
+
   function show(next) {
     index = Math.max(0, Math.min(slides.length - 1, next));
     slides.forEach(function (slide, i) {
       slide.classList.toggle('active', i === index);
       slide.classList.toggle('visible', i === index);
     });
+
+    var surface = surfaceOf(slides[index]);
+    document.documentElement.style.setProperty('--stage-bg', surface);
+    document.documentElement.style.setProperty('--slide-bg', surface);
+
     if (location.hash !== '#' + (index + 1)) {
       history.replaceState(null, '', '#' + (index + 1));
     }

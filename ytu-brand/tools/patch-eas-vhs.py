@@ -47,13 +47,25 @@ def rect(pen, x0, y0, x1, y1):
 
 def breve(pen, x0, x1, y0):
     """
-    2 sirali piksel breve (kap sekli):
+    Kap seklinde piksel breve:
         #  .  #     ust sira, iki uctaki hucreler
         #  #  #     alt sira, tam genislik
+
+    Siralar TAM degil YARIM piksel (120.5 birim) yuksekliginde. Toplam yukseklik
+    boylece 241 = 1 piksel olur ve breve, fontun kendi aksan bandina (buyuk
+    harfte 1807-2048) sigar.
+
+    Tam piksel siralarla yapilan ilk surum 2289'a, yani 1.118 em'e cikiyordu --
+    fontun dogal tavani olan 1.000 em'in (I noktasinin tepesi) uzerine. Sonuc:
+    "01 / DEGISTIRILEMEZ" gibi yiginlarda breve bir ust satira giriyor ve
+    cakismayi onlemek icin tum satir yuksekliklerini gereksiz yere acmak
+    gerekiyordu. Yarim piksel izgarasi fontun kendi olcusu (sedilla da 120
+    birimlik bir kare kullaniyor), o yuzden kap sekli bozulmadan kuculuyor.
     """
-    rect(pen, x0, y0, x1, y0 + PX)                    # alt bar
-    rect(pen, x0, y0 + PX, x0 + PX, y0 + 2 * PX)      # sol ust
-    rect(pen, x1 - PX, y0 + PX, x1, y0 + 2 * PX)      # sag ust
+    row = HALF
+    rect(pen, x0, y0, x1, y0 + row)                       # alt bar
+    rect(pen, x0, y0 + row, x0 + PX, y0 + 2 * row)        # sol ust
+    rect(pen, x1 - PX, y0 + row, x1, y0 + 2 * row)        # sag ust
 
 
 CEDILLA = record("cedilla")
