@@ -32,11 +32,18 @@ body {
     height: 1080px;
     overflow: hidden;
     transform-origin: 0 0;
-    background: var(--slide-bg, #fff);
+    background: var(--slide-bg, #0a0a0c);
 }
 
 /* 4. Slides stack inside the fixed stage.
-   Content must be laid out at 1920×1080, not reflowed per device. */
+   Content must be laid out at 1920×1080, not reflowed per device.
+
+   ZEMIN RENGI BILEREK BURADA TANIMLI DEGIL. Yuzeyi marka sistemindeki
+   `.stage` / `.stage--signal` / `.stage--deep` siniflari belirler ve bunlar
+   ayni elemanda, ayni ozgullukte (0,1,0) yasar. Buraya bir `background`
+   yazilirsa yapistirma sirasina gore `.slide` kurali `.stage--signal`i ezer
+   ve butun mavi slaytlar koyu cikar -- sessizce, hata vermeden.
+   Slaytin arkasindaki bosluk `.deck-stage` tarafindan boyanir. */
 .slide {
     position: absolute;
     inset: 0;
@@ -47,7 +54,6 @@ body {
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
-    background: var(--slide-bg, #fff);
 }
 
 .slide.active,

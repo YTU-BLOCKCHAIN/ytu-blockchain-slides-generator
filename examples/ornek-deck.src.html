@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!-- lang="tr" ZORUNLU: CSS text-transform:uppercase kuralı Türkçe için
+     i -> İ eşlemesini ancak bu nitelikle yapar. Yoksa "Sistemi" -> "SISTEMI"
+     gibi bozuk başlıklar oluşur. -->
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLOCKCHAIN 101 — YTÜ Blockchain</title>
+
+<!-- Harici font/CSS isteği yok. Her şey gömülü; sunum sırasında ağ
+     bağlantısı gerekmez. -->
+<style>
+/* === 1. MARKA SİSTEMİ (ytu-brand/brand.css — tam içerik) ================= */
+{{BRAND_CSS}}
+
+/* === 2. SABİT SAHNE (viewport-base.css — tam içerik) ====================
+   brand.css'ten SONRA yapıştırılır. `.slide` konumlandırmayı, `.stage`
+   yüzey ve tipografiyi verir; ikisi aynı elemanda çakışmaz çünkü
+   brand.css'teki `.stage` bilerek `position` yazmaz. */
+{{VIEWPORT_CSS}}
+
+/* === 3. DECK'E ÖZEL ===================================================== */
+
+/* Giriş animasyonu. Sistemin tek hareketi budur; slayt görünür olunca
+   içerik kademeli belirir. */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide.visible .reveal { opacity: 1; transform: none; }
+.slide.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
+.slide.visible .reveal:nth-child(2) { transition-delay: 0.12s; }
+.slide.visible .reveal:nth-child(3) { transition-delay: 0.19s; }
+.slide.visible .reveal:nth-child(4) { transition-delay: 0.26s; }
+
+/* Sol alta demirlenen kapak/kapanış bloğu. */
+.anchor-bl {
+  position: absolute;
+  left: var(--margin);
+  bottom: calc(var(--margin) + 96px);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+}
+.anchor-mid {
+  position: absolute;
+  left: var(--margin);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: flex-start;
+}
+.byline {
+  position: absolute;
+  left: var(--margin);
+  bottom: calc(var(--margin) - 12px);
+  color: var(--ink-faint);
+}
+.chapter-num {
+  font-family: var(--font-display);
+  font-size: 180px;
+  line-height: 0.8;
+  opacity: 0.42;
+}
+.split {
+  display: grid;
+  gap: 80px;
+  align-items: center;
+}
+.split--image { grid-template-columns: 1fr 620px; }
+.split--even { grid-template-columns: 1fr 1fr; align-items: stretch; }
+</style>
+</head>
+<body>
+
+<div class="deck-viewport">
+  <main class="deck-stage" id="deckStage">
+
+    <!-- ===== 01 · KAPAK ================================================= -->
+    <section class="slide stage active" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">2026 · BAHAR DÖNEMİ</div>
+      <div class="anchor-bl">
+        <!-- BLOCKCHAIN elle büyük harf: text-transform Türkçe kuralını
+             uygulayıp noktalı İ üretmesin, logodaki gibi noktasız kalsın. -->
+        <span class="tag reveal">EĞİTİM SERİSİ · 01</span>
+        <h1 class="d-hero reveal">BLOCKCHAIN<br>101</h1>
+        <div class="rule-block reveal"><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="lead reveal" style="max-width:36ch;margin:0;color:var(--ink-dim)">
+          Hafta 01 — Kriptografik özet fonksiyonları, dijital imza ve
+          değiştirilemez kayıt defteri
+        </p>
+      </div>
+      <div class="chrome byline">SUNAN · YTÜ BLOCKCHAIN EĞİTİM EKİBİ</div>
+      <div class="chrome page"><b>01</b> <span>/ 08</span></div>
+    </section>
+
+    <!-- ===== 02 · BÖLÜM AYRACI ========================================== -->
+    <section class="slide stage stage--signal" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">BÖLÜM</div>
+      <div class="anchor-mid">
+        <div class="chrome chapter-num reveal">01</div>
+        <h2 class="d-chapter reveal">Değiştirilemez<br>Kayıt</h2>
+        <p class="lead reveal" style="margin:0;max-width:40ch">
+          Bir defterin, sahibi dahil kimse tarafından geriye dönük
+          değiştirilememesi ne demek
+        </p>
+      </div>
+      <div class="prog" data-total="8" data-now="2"></div>
+      <div class="chrome page"><b>02</b> <span>/ 08</span></div>
+    </section>
+
+    <!-- ===== 03 · İÇERİK + DITHER ======================================= -->
+    <section class="slide stage" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">BLOCKCHAIN 101 · HAFTA 01</div>
+      <div class="body-area split split--image">
+        <div style="display:flex;flex-direction:column;gap:32px;align-items:flex-start">
+          <span class="tag tag--quiet reveal">KÖKEN</span>
+          <h3 class="d-headline reveal">SATOSHI<br>NAKAMOTO</h3>
+          <p class="body reveal" style="max-width:38ch;color:var(--ink-dim)">
+            2008'de dokuz sayfalık bir bildiri yayımladı, 2011'de ortadan
+            kayboldu. Kimliği hâlâ bilinmiyor — ve sistemin çalışması için
+            bilinmesi de gerekmiyor.
+          </p>
+          <p class="body reveal" style="max-width:38ch;margin:0">
+            <span class="hl">Güven, kişiye değil koda yazılmıştı.</span>
+          </p>
+        </div>
+        <img class="dither" src="{{SATOSHI}}" alt="Nokta matrisine dönüştürülmüş Satoshi Nakamoto illüstrasyonu">
+      </div>
+      <div class="prog" data-total="8" data-now="3"></div>
+      <div class="chrome page"><b>03</b> <span>/ 08</span></div>
+    </section>
+
+    <!-- ===== 04 · VERİ / TABLO ========================================== -->
+    <section class="slide stage" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">KARŞILAŞTIRMA</div>
+      <div class="body-area">
+        <h3 class="d-headline reveal">Zincir Karşılaştırması</h3>
+        <table class="tbl reveal">
+          <thead>
+            <tr>
+              <th>Ağ</th><th>Mutabakat</th>
+              <th class="num">TPS</th><th class="num">Finalite</th><th class="num">Ort. Ücret</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Bitcoin</td><td>Proof of Work</td><td class="num">7</td><td class="num">60 dk</td><td class="num">1.40 $</td></tr>
+            <tr><td>Ethereum</td><td>Proof of Stake</td><td class="num">15</td><td class="num">13 dk</td><td class="num">0.85 $</td></tr>
+            <tr class="hi"><td>Solana</td><td>PoH + PoS</td><td class="num">3000</td><td class="num">12 sn</td><td class="num">0.01 $</td></tr>
+            <tr><td>Stellar</td><td>SCP</td><td class="num">1000</td><td class="num">5 sn</td><td class="num">0.01 $</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prog" data-total="8" data-now="4"></div>
+      <div class="chrome page"><b>04</b> <span>/ 08</span></div>
+    </section>
+
+    <!-- ===== 05 · EĞİTİM: KOD + TERİM + UYARI =========================== -->
+    <section class="slide stage" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">SOLIDITY · DERS 03</div>
+      <div class="body-area split split--even" style="align-content:center">
+        <div style="display:flex;flex-direction:column;gap:32px">
+          <h3 class="d-subhead reveal">Yeniden Giriş Açığı</h3>
+          <pre class="code reveal"><span class="c">// güvensiz — bakiye güncellenmeden önce dış çağrı</span>
+<span class="k">function</span> withdraw() <span class="k">public</span> {
+  <span class="k">uint</span> amount = balances[msg.sender];
+<span class="hi">  (<span class="k">bool</span> ok, ) = msg.sender.call{value: amount}(<span class="s">""</span>);</span>
+  balances[msg.sender] = <span class="s">0</span>;
+}</pre>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:36px;justify-content:center">
+          <dl class="term reveal">
+            <dt>Reentrancy</dt>
+            <dd>Bir sözleşmenin, ilk çağrı tamamlanmadan aynı fonksiyona
+                yeniden girilmesi. 2016'daki DAO saldırısının kökeni.</dd>
+          </dl>
+          <div class="note note--danger reveal">
+            <span class="tag tag--signal">DİKKAT</span>
+            <p style="margin:0">Durum değişkenini <em>her zaman</em> dış
+            çağrıdan önce güncelle. Checks–Effects–Interactions.</p>
+          </div>
+        </div>
+      </div>
+      <div class="prog" data-total="8" data-now="5"></div>
+      <div class="chrome page"><b>05</b> <span>/ 08</span></div>
+    </section>
+
+    <!-- ===== 06 · ETKİNLİK: AJANDA ====================================== -->
+    <section class="slide stage" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">ATÖLYE · LAB 02</div>
+      <div class="body-area" style="justify-content:center">
+        <h3 class="d-subhead reveal" style="margin-bottom:36px">Bu Haftanın Programı</h3>
+        <ul class="agenda reveal" style="margin:0;padding:0">
+          <li><time>18:00</time><strong>Tekrar ve soru turu</strong><span>Geçen hafta</span></li>
+          <li><time>18:20</time><strong>Özet fonksiyonu canlı demo</strong><span>SHA-256</span></li>
+          <li><time>19:00</time><strong>Kendi bloğunu yaz</strong><span>Uygulama</span></li>
+          <li><time>19:45</time><strong>Ödev ve kapanış</strong><span>Gelecek hafta</span></li>
+        </ul>
+      </div>
+      <div class="prog" data-total="8" data-now="6"></div>
+      <div class="chrome page"><b>06</b> <span>/ 08</span></div>
+    </section>
+
+    <!-- ===== 07 · İSTATİSTİK (SIGNAL) =================================== -->
+    <section class="slide stage stage--signal" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">2025 — 2026 SEZONU</div>
+      <div class="body-area" style="justify-content:center;gap:72px">
+        <h3 class="d-headline reveal" style="max-width:18ch">Bir Yılda Neredeydik</h3>
+        <div class="grid reveal" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat"><b>320</b><span>Aktif üye</span></div>
+          <div class="stat"><b>12</b><span>Etkinlik</span></div>
+          <div class="stat"><b>04</b><span>Hackathon</span></div>
+          <div class="stat"><b>07</b><span>Sponsor</span></div>
+        </div>
+      </div>
+      <div class="prog" data-total="8" data-now="7"></div>
+      <div class="chrome page"><b>07</b> <span>/ 08</span></div>
+    </section>
+
+    <!-- ===== 08 · KAPANIŞ =============================================== -->
+    <section class="slide stage stage--signal" lang="tr">
+      <img class="mark" src="{{MARK}}" alt="">
+      <div class="chrome meta">YTÜ BLOCKCHAIN</div>
+      <div class="anchor-mid">
+        <h2 class="d-title reveal">Aramıza<br>Katıl</h2>
+        <p class="lead reveal" style="margin:0;max-width:32ch">
+          Her hafta buluşuyoruz. Deneyim şart değil, merak yeterli.
+        </p>
+        <div class="reveal" style="display:flex;gap:16px">
+          <span class="tag tag--solid">YTUBLOCKCHAIN.COM</span>
+          <span class="tag">@YTUBLOCKCHAIN</span>
+        </div>
+      </div>
+      <img class="dither" src="{{EVOLUTION}}" alt=""
+           style="position:absolute;right:0;bottom:140px;width:820px;opacity:.92">
+      <!-- Kapanışta ilerleme çubuğu yok: deck bitti sinyali. -->
+      <div class="chrome page"><b>08</b> <span>/ 08</span></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* === DECK DENETLEYİCİSİ ===================================================
+   Üç iş yapar: sahneyi pencereye ölçekler, slaytlar arasında gezinir,
+   ilerleme çubuklarını kurar. Harici kütüphane yok. */
+
+(function () {
+  'use strict';
+
+  var stage = document.getElementById('deckStage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var index = 0;
+
+  /* --- İlerleme çubukları -------------------------------------------------
+     Segment sayısı slayt sayısına eşittir; izleyici kaç slayt kaldığını
+     sayabilir. */
+  document.querySelectorAll('.prog').forEach(function (bar) {
+    var total = Number(bar.dataset.total) || 0;
+    var now = Number(bar.dataset.now) || 0;
+    var out = '';
+    for (var i = 1; i <= total; i++) {
+      out += '<i class="' + (i < now ? 'on' : i === now ? 'now' : '') + '"></i>';
+    }
+    bar.innerHTML = out;
+  });
+
+  /* --- Sahne ölçekleme ----------------------------------------------------
+     1920×1080 sahne tek transform ile pencereye sığdırılır ve ortalanır.
+     Letterbox/pillarbox olabilir; içerik asla yeniden akmaz.
+
+     Ölçek JavaScript ile hesaplanır çünkü CSS'te yazılamaz:
+     `scale(calc(100vw / 1920))` uzunluğu sayıya böler, sonuç yine uzunluk
+     olur ve scale() geçersiz sayılıp sessizce yok sayılır. */
+  function fit() {
+    var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    var x = (window.innerWidth - 1920 * scale) / 2;
+    var y = (window.innerHeight - 1080 * scale) / 2;
+    stage.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + scale + ')';
+  }
+
+  /* --- Gezinme ------------------------------------------------------------
+     Görünürlük `.active`/`.visible` ile yönetilir, `display` ile değil:
+     sonradan gelen layout kuralları display'i ezip tüm slaytları aynı anda
+     görünür yapabilir. */
+  function show(next) {
+    index = Math.max(0, Math.min(slides.length - 1, next));
+    slides.forEach(function (slide, i) {
+      slide.classList.toggle('active', i === index);
+      slide.classList.toggle('visible', i === index);
+    });
+    if (location.hash !== '#' + (index + 1)) {
+      history.replaceState(null, '', '#' + (index + 1));
+    }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      show(index + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      show(index - 1);
+    } else if (e.key === 'Home') {
+      show(0);
+    } else if (e.key === 'End') {
+      show(slides.length - 1);
+    }
+  });
+
+  /* Dokunmatik: yatay kaydırma slayt değiştirir. 40px eşiği kazara
+     dokunuşları eler. */
+  var touchX = null;
+  document.addEventListener('touchstart', function (e) {
+    touchX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
+    touchX = null;
+  }, { passive: true });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', function () {
+    var n = parseInt(location.hash.slice(1), 10);
+    if (n) show(n - 1);
+  });
+
+  fit();
+  show(parseInt(location.hash.slice(1), 10) - 1 || 0);
+})();
+</script>
+</body>
+</html>

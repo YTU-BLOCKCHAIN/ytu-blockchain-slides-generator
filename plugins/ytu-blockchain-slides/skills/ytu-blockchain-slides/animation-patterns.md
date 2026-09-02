@@ -1,110 +1,95 @@
-# Animation Patterns Reference
+# Hareket
 
-Use this reference when generating presentations. Match animations to the intended feeling.
+Bu sistemde hareket bir stil tercihi değil, **sabit bir davranış**. Deck'ten
+deck'e değişmez; "bu sunuma özel bir geçiş" eklenmez.
 
-## Effect-to-Feeling Guide
+Toplam repertuvar üç şeyden ibaret: slayt geçişi, içerik girişi, ilerleme
+çubuğu. Başka hareket yok.
 
-| Feeling | Animations | Visual Cues |
-|---------|-----------|-------------|
-| **Dramatic / Cinematic** | Slow fade-ins (1-1.5s), large scale transitions (0.9 to 1), parallax scrolling | Dark backgrounds, spotlight effects, full-bleed images |
-| **Techy / Futuristic** | Neon glow (box-shadow), glitch/scramble text, grid reveals | Particle systems (canvas), grid patterns, monospace accents, cyan/magenta/electric blue |
-| **Playful / Friendly** | Bouncy easing (spring physics), floating/bobbing | Rounded corners, pastel/bright colors, hand-drawn elements |
-| **Professional / Corporate** | Subtle fast animations (200-300ms), clean slides | Navy/slate/charcoal, precise spacing, data visualization focus |
-| **Calm / Minimal** | Very slow subtle motion, gentle fades | High whitespace, muted palette, serif typography, generous padding |
-| **Editorial / Magazine** | Staggered text reveals, image-text interplay | Strong type hierarchy, pull quotes, grid-breaking layouts, serif headlines + sans body |
+## 1. Slayt geçişi
 
-## Entrance Animations
+Görünürlük `.active` / `.visible` sınıflarıyla yönetilir, **`display` ile
+değil**. Sebep: sonradan gelen bir layout kuralı (`.slide-content { display:
+flex }` gibi) `display:none`'ı ezip bütün slaytları aynı anda görünür yapabilir.
+`viewport-base.css` bunu `visibility`, `opacity` ve `pointer-events` üzerinden
+çözer.
 
 ```css
-/* Fade + Slide Up (most versatile) */
+.slide {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.slide.active,
+.slide.visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+```
+
+Geçiş süresi eklenmez; slayt anında değişir. Sunum sırasında bekleme hissi
+yaratmaz.
+
+## 2. İçerik girişi
+
+Slayt görünür olunca içerik aşağıdan kademeli belirir. Tek easing, tek süre.
+
+```css
 .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s var(--ease-out-expo),
-                transform 0.6s var(--ease-out-expo);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.visible .reveal {
-    opacity: 1;
-    transform: translateY(0);
-}
+.slide.visible .reveal { opacity: 1; transform: none; }
 
-/* Scale In */
-.reveal-scale {
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.6s, transform 0.6s var(--ease-out-expo);
-}
-
-/* Slide from Left */
-.reveal-left {
-    opacity: 0;
-    transform: translateX(-50px);
-    transition: opacity 0.6s, transform 0.6s var(--ease-out-expo);
-}
-
-/* Blur In */
-.reveal-blur {
-    opacity: 0;
-    filter: blur(10px);
-    transition: opacity 0.8s, filter 0.8s var(--ease-out-expo);
-}
+.slide.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
+.slide.visible .reveal:nth-child(2) { transition-delay: 0.12s; }
+.slide.visible .reveal:nth-child(3) { transition-delay: 0.19s; }
+.slide.visible .reveal:nth-child(4) { transition-delay: 0.26s; }
 ```
 
-## Background Effects
+Bir slaytta en fazla **dört** `.reveal` öğesi olur. Daha fazlası kademeyi
+sürükler ve sunucu konuşmaya başlamadan animasyon bitmemiş olur.
 
-```css
-/* Gradient Mesh — layered radial gradients for depth */
-.gradient-bg {
-    background:
-        radial-gradient(ellipse at 20% 80%, rgba(120, 0, 255, 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(0, 255, 200, 0.2) 0%, transparent 50%),
-        var(--bg-primary);
-}
+Kademe sırası okuma sırasıdır: etiket → başlık → ayraç → gövde.
 
-/* Noise Texture — inline SVG for grain */
-.noise-bg {
-    background-image: url("data:image/svg+xml,..."); /* Inline SVG noise */
-}
+## 3. İlerleme çubuğu
 
-/* Grid Pattern — subtle structural lines */
-.grid-bg {
-    background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-}
+Animasyon değil, durum göstergesi. Slayt yüklendiğinde JavaScript ile kurulur;
+geçişte yeniden çizilir, hareket etmez.
+
+```js
+document.querySelectorAll('.prog').forEach(function (bar) {
+  var total = Number(bar.dataset.total) || 0;
+  var now = Number(bar.dataset.now) || 0;
+  var out = '';
+  for (var i = 1; i <= total; i++) {
+    out += '<i class="' + (i < now ? 'on' : i === now ? 'now' : '') + '"></i>';
+  }
+  bar.innerHTML = out;
+});
 ```
 
-## Interactive Effects
+## Kullanılmayanlar
 
-```javascript
-/* 3D Tilt on Hover — adds depth to cards/panels */
-class TiltEffect {
-    constructor(element) {
-        this.element = element;
-        this.element.style.transformStyle = 'preserve-3d';
-        this.element.style.perspective = '1000px';
+Aşağıdakiler bu sistemin dili değildir ve eklenmez:
 
-        this.element.addEventListener('mousemove', (e) => {
-            const rect = this.element.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            this.element.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
-        });
+- Parçacık sistemi, canvas arka planı
+- Neon parlama, glow, box-shadow efekti
+- Glitch / karakter karıştırma animasyonu
+- Parallax, 3B eğilme, manyetik düğme
+- Özel imleç, imleç izi
+- Sayaç animasyonu (istatistik rakamları sabit durur)
+- Slaytlar arası kayma, çevirme, zoom geçişi
 
-        this.element.addEventListener('mouseleave', () => {
-            this.element.style.transform = 'rotateY(0) rotateX(0)';
-        });
-    }
-}
-```
+Gerekçe: sistem düz ve köşeli. Derinlik ve hareket yerine tipografi, blok
+ızgarası ve dither dokusu çalışır. Efekt eklemek deck'i "sunum şablonu"
+görüntüsüne düşürür.
 
-## Troubleshooting
+## Azaltılmış hareket
 
-| Problem | Fix |
-|---------|-----|
-| Fonts not loading | Check Fontshare/Google Fonts URL; ensure font names match in CSS |
-| Animations not triggering | Verify Intersection Observer is running; check `.visible` class is being added |
-| Scroll snap not working | Ensure `scroll-snap-type: y mandatory` on html; each slide needs `scroll-snap-align: start` |
-| Mobile issues | Disable heavy effects at 768px breakpoint; test touch events; reduce particle count |
-| Performance issues | Use `will-change` sparingly; prefer `transform`/`opacity` animations; throttle scroll handlers |
+`prefers-reduced-motion` desteği `viewport-base.css` ve `brand.css` içinde
+zaten tanımlı. Ek bir şey yapılmaz; yeni bir `transition` yazarsan bu blokların
+kapsamına girdiğinden emin ol.

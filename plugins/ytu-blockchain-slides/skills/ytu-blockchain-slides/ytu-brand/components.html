@@ -84,14 +84,29 @@
 
   --font-display: 'EAS VHS TR', 'Courier New', monospace;
   --font-body: 'Clash Grotesk', 'Helvetica Neue', Arial, sans-serif;
+
+  /* --- viewport-base.css köprüsü ----------------------------------------
+     viewport-base.css bu iki değişkeni okur ve tanımlı değillerse beyaza
+     (#fff) düşer: `background: var(--slide-bg, #fff)`. Marka değerlerini
+     burada tanımlamak, iki dosyanın yapıştırma sırası ne olursa olsun
+     zeminin beyaz kalmamasını garantiler.
+     --stage-bg letterbox alanı, --slide-bg slayt zeminidir.              */
+  --stage-bg: #0a0a0c;
+  --slide-bg: #0a0a0c;
 }
 
 /* === SAHNE ================================================================
    Her slayt 1920×1080 sabit sahne. Ölçekleme tek transform ile yapılır;
-   içerik hiçbir zaman yeniden akmaz. Telefonda da 16:9 korunur.          */
+   içerik hiçbir zaman yeniden akmaz. Telefonda da 16:9 korunur.
+
+   `.stage` KONUMLANDIRMA YAPMAZ. Gerçek deck'te aynı elemanda
+   `viewport-base.css`'in `.slide` sınıfı da bulunur
+   (`<section class="slide stage">`) ve o zaten `position:absolute; inset:0`
+   veriyor. Buraya bir `position` yazılırsa iki kural aynı özgüllükte
+   çakışır, kazananı yapıştırma sırası belirler ve slaytlar ya üst üste
+   yığılır ya da beyaz kalır. Galeride konumlandırmayı sayfa kabuğu yapar. */
 
 .stage {
-  position: relative;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
