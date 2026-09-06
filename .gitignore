@@ -1,5 +1,14 @@
 .DS_Store
 __pycache__/
 *.pyc
-.frontend-slides/
+.venv/
 node_modules/
+
+# --- URETILMIS DOSYALAR ---------------------------------------------------
+# Bunlar tools/ altindaki script'lerle uretilir ve base64 gomulu font icerir.
+# Commit'lenirlerse her tasarim dokunusunda ~2 MB kalici git gecmisi birikir
+# ve git base64'u delta sikistiramaz. Klonladiktan sonra `make` ile uret.
+ytu-brand/brand.css
+ytu-brand/components.html
+examples/ornek-deck.html
+dist/

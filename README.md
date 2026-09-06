@@ -1,61 +1,97 @@
-# YTÜ Blockchain Slides
+# YTÜ Blockchain Slides Generator
 
-Kulübün tüm sunumlarını **tek bir marka tasarım sisteminden** üreten Claude Code
-skill'i. Ders anlatımı, etkinlik duyurusu, sponsor sunumu, hackathon deck'i —
-hepsi aynı görünür.
+Kulübün sunum **tasarım sistemi** ve deck üretmek için kullanılan Claude Code
+skill'i. Burada deck tutulmaz — üretilen deck'ler
+[`slides`](https://github.com/YTU-BLOCKCHAIN/slides) deposunda yaşar ve oradan
+yayınlanır.
 
-Çıktı bağımlılıksız tek bir HTML dosyasıdır: fontlar ve görseller base64 gömülü,
-ağ bağlantısı gerekmez. Tarayıcıda açılır, projeksiyonda 16:9 kalır, PDF'e
-aktarılabilir.
+Bu depo iki şey barındırır:
 
-> [zarazhangrui/frontend-slides](https://github.com/zarazhangrui/frontend-slides)
-> forku. Orijinal skill her deck için 34 şablon arasından stil seçtiriyordu;
-> bu sürümde şablonlar kaldırıldı ve yerine tek, kilitli bir sistem kondu.
+1. **Tasarım sistemi** — renkler, fontlar, 18 bileşen, kurallar
+2. **Skill** — Claude Code'a "nasıl deck üretilir" anlatan talimatlar
 
-## Hızlı bakış
+## Kurulum
 
-Sistemin tamamını görmek için tarayıcıda aç:
-
+```bash
+git clone https://github.com/YTU-BLOCKCHAIN/ytu-blockchain-slides-generator
+cd ytu-blockchain-slides-generator
+make kur      # fonttools, brotli, Pillow
+make          # her şeyi üret
 ```
-ytu-brand/components.html
+
+Üretilmiş dosyalar depoda tutulmaz; `make` bunları yerelde oluşturur. Sebebi:
+içlerinde base64 gömülü font var, commit'lenirlerse her tasarım dokunuşu
+kalıcı olarak ~2 MB git geçmişi biriktirir.
+
+Sonra tarayıcıda aç:
+
+```bash
+open ytu-brand/components.html    # tasarım sistemi galerisi
+open examples/ornek-deck.html     # 8 slaytlık örnek deck
 ```
 
-Beş slayt arketipi, 18 bileşen ve tüm tokenlar gerçek 1920×1080 ölçeğinde
-orada.
+## Deck nasıl üretilir
 
-## Kullanım
+Claude Code'u bu depoda aç ve iste:
 
-Claude Code içinde kulüp için bir sunum iste. Skill sırayla:
+> Solidity ders 04 için deck yap, konu reentrancy açığı
 
-1. Amaç, uzunluk, içerik ve yoğunluk sorar. **Stil sormaz** — stil sabittir.
-2. Slayt planını onaya sunar.
-3. Tek dosya HTML üretir, tarayıcıda açar.
-4. İstersen Vercel'e dağıtır ya da PDF'e aktarır.
+Skill sırayla:
 
-Görsel vereceksen dither'dan geçirilir; işlenmemiş fotoğraf kullanılmaz.
+1. Amaç, uzunluk, içerik ve yoğunluk sorar — **stil sormaz**, stil sabittir
+2. `ytu-brand/design.md`'yi baştan sona okur
+3. Slayt planını onaya sunar
+4. Tek dosya HTML üretir, tarayıcıda açar
+5. Ekran görüntüsüyle taşma ve çakışma kontrol eder
+
+Üretilen deck'i `slides` deposuna taşıyıp PR açarsın.
+
+## Marka kitini güncelleme
+
+`slides` deposu tasarım dosyalarının kopyasını taşır. Tasarımı burada
+değiştirdikten sonra:
+
+```bash
+make kit      # dist/kit/ altına toplar (~200 KB)
+```
+
+Sonra `slides` deposunda `./marka-guncelle` çalıştırılır; kit oradaki `brand/`
+klasörüne kopyalanır ve bütün deck'ler yeni tasarımla yeniden üretilir.
+
+Kitin içeriği: `brand.css`, `viewport-base.css`, `deck.js`, `design.md`,
+`assets/mark.svg`. Kaynak dosyalar (`brand.src.css`, fontlar, `tools/`) burada
+kalır — deck yazan kişinin bunlara erişmesi gerekmiyor.
 
 ## Depo yapısı
 
 ```
-ytu-brand/
-├── design.md            Tasarım sisteminin anayasası — üretimden önce okunur
-├── brand.src.css        Kaynak stil dosyası (elle düzenlenen)
-├── brand.css            ÜRETİLMİŞ — fontlar base64 gömülü, deck'e kopyalanır
-├── components.src.html  Galeri kaynağı
-├── components.html      ÜRETİLMİŞ — canlı bileşen galerisi
-├── fonts/               EAS VHS TR (yamalı) + Clash Grotesk
-├── assets/              Logo ve dither'lanmış görseller
-└── tools/
-    ├── patch-eas-vhs.py     Fonta Türkçe glifleri ve tabular rakamları ekler
-    ├── build-brand-css.py   brand.src.css + fontlar -> brand.css
-    ├── build-gallery.py     components.src.html + varlıklar -> components.html
-    └── dither.py            Fotoğrafı 1-bit marka görseline çevirir
-
 SKILL.md              Skill akışı (Phase 0-6)
-html-template.md      HTML iskeleti ve JS davranışı
-viewport-base.css     Sabit sahne CSS'i — her deck'e kopyalanır
-scripts/              PPTX çıkarma, Vercel dağıtımı, PDF aktarımı
+html-template.md      HTML iskeleti
+animation-patterns.md İzin verilen üç hareket
+viewport-base.css     Sabit 16:9 sahne mekaniği
+
+ytu-brand/
+  design.md           TASARIM ANAYASASI — deck üretmeden önce okunur
+  brand.src.css       Kaynak stil (elle düzenlenir)
+  brand.css           ÜRETİLMİŞ — fontlar base64 gömülü
+  deck.js             Slayt denetleyicisi
+  components.src.html Galeri kaynağı
+  components.html     ÜRETİLMİŞ — canlı bileşen galerisi
+  fonts/              EAS VHS TR (yamalı) + Clash Grotesk
+  assets/             Logo ve dither'lanmış görseller
+  tools/
+    patch-eas-vhs.py    Fonta Türkçe glifleri ve tabular rakamları ekler
+    build-brand-css.py  brand.src.css + fontlar -> brand.css
+    build-gallery.py    Galeri
+    build-example.py    Örnek deck
+    dither.py           Fotoğrafı 1-bit marka görseline çevirir
+
+examples/             Örnek deck (kaynak + üretilmiş)
+scripts/              PPTX çıkarma, PDF aktarımı, Vercel dağıtımı
 ```
+
+**Kural:** adında `.src.` olan dosya elle düzenlenir, olmayan üretilir.
+Üretilmiş bir dosyayı elle düzenlersen bir sonraki `make`'te kaybolur.
 
 ## Tasarım sistemi özeti
 
@@ -67,48 +103,44 @@ scripts/              PPTX çıkarma, Vercel dağıtımı, PDF aktarımı
 | Sahne | 1920×1080 sabit, tek transform ile ölçeklenir |
 | İmza öğeleri | Film grain · 1-bit dither görsel · köşeli etiket · mavi vurgu bandı |
 
-Ayrıntı ve gerekçeler: [`ytu-brand/design.md`](ytu-brand/design.md).
+Gerekçeleriyle birlikte tamamı: [`ytu-brand/design.md`](ytu-brand/design.md)
 
-## Üretilmiş dosyaları yeniden kurma
+## Bilinmesi gereken iki tuzak
 
-`brand.css` ve `components.html` üretilmiş dosyalardır; elle düzenlenmez.
-Kaynak değiştiğinde:
+**Türkçe büyük harf.** Deck'lerde `<html lang="tr">` zorunlu. Yoksa CSS
+`text-transform: uppercase` kuralı `i → I` eşler ve "Sistemi" → "SISTEMI"
+olur. Ama marka adları ve İngilizce terimler (`BLOCKCHAIN`, `BITCOIN`,
+`SATOSHI`) HTML'e **elle büyük harf** yazılır — aksi hâlde aynı kural onlara
+da Türkçe uygular ve logodaki noktasız I bozulur.
+
+**Font yaması.** `fonts/eas-vhs-tr.woff2` orijinal değil. EAS VHS'te Ğ, İ, Ş,
+ğ, ş glifleri yoktu (eski afişlerde "BAŞVURU" yerine "BASVURU" yazmasının
+sebebi bu) ve rakamlar üç farklı genişlikteydi. `make font` yamayı Drive'daki
+orijinalden yeniden üretir.
+
+## Görseller
+
+Deck'e giren her fotoğraf 1-bit dither'dan geçer:
 
 ```bash
-cd ytu-brand
-python tools/build-brand-css.py    # brand.src.css + fonts -> brand.css
-python tools/build-gallery.py      # components.src.html + assets -> components.html
+python3 ytu-brand/tools/dither.py girdi.jpg cikti.png --width 900
 ```
 
-Font dosyası değişirse önce yamayı çalıştır:
+Çıktı beyaz nokta matrisi + şeffaf zemindir; aynı dosya hem koyu hem mavi
+yüzeyde çalışır. Portre için `--width 700`, geniş görsel için `--width 1200`.
 
-```bash
-python tools/patch-eas-vhs.py <orijinal-eas-vhs.ttf> fonts/eas-vhs-tr.ttf
-```
-
-Bağımlılık: `pip install fonttools brotli Pillow`
-
-## Font notu
-
-`fonts/eas-vhs-tr.woff2` yamalanmış bir dosyadır. Orijinal EAS VHS'te **Ğ, İ,
-Ş, ğ, ş glifleri yoktu**; marka kitindeki eski afişlerde "BAŞVURU" yerine
-"BASVURU" yazmasının sebebi budur. Ayrıca rakamlar üç farklı genişlikteydi, bu
-da sayfa sayacında ve tablo sütunlarında kaymaya yol açıyordu.
-
-`tools/patch-eas-vhs.py` eksik beş glifi fontun kendi yarım-piksel ızgarasına
-(120.5 birim) oturacak şekilde üretir ve rakamları tek genişliğe eşitler.
-
-Ayrıca deck'lerde `<html lang="tr">` zorunludur: bu nitelik olmadan CSS
-`text-transform: uppercase` kuralı `i → I` eşler ve "Sistemi" → "SISTEMI" olur.
+İşlenmemiş fotoğraf kullanılmaz — sistemin dışında durur ve slaytı yamalı
+gösterir.
 
 ## Kaynak dosyalar
 
-Marka kitinin aslı `contact@ytublockchain.com` Drive hesabında
-`design/` klasöründedir (logo, font, afiş kaynakları). Bu depoda yalnız deck
-üretimi için gereken işlenmiş sürümler tutulur.
+Marka kitinin aslı (logo, font, afiş kaynakları) `contact@ytublockchain.com`
+Drive hesabında `design/` klasöründedir. Bu depoda yalnız deck üretimi için
+gereken işlenmiş sürümler tutulur.
 
 ## Lisans
 
-Orijinal skill MIT lisanslıdır ([LICENSE](LICENSE)). Marka varlıkları
-(logo, fontlar, görseller) YTÜ Blockchain Kulübü'ne aittir ve bu lisansın
-kapsamı dışındadır.
+Orijinal skill [zarazhangrui/frontend-slides](https://github.com/zarazhangrui/frontend-slides)
+forkudur, MIT lisanslıdır ([LICENSE](LICENSE)). Marka varlıkları (logo,
+fontlar, görseller) YTÜ Blockchain Kulübü'ne aittir ve bu lisansın kapsamı
+dışındadır.

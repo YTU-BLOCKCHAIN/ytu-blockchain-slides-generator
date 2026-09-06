@@ -30,6 +30,7 @@ html = SRC.read_text(encoding="utf-8")
 replacements = {
     "{{BRAND_CSS}}": (ROOT / "brand.css").read_text(encoding="utf-8"),
     "{{VIEWPORT_CSS}}": (REPO / "viewport-base.css").read_text(encoding="utf-8"),
+    "{{DECK_JS}}": (ROOT / "deck.js").read_text(encoding="utf-8"),
     "{{MARK}}": data_uri(ROOT / "assets" / "mark.svg", "image/svg+xml"),
     "{{SATOSHI}}": data_uri(ROOT / "assets" / "satoshi-1bit.png", "image/png"),
     "{{EVOLUTION}}": data_uri(ROOT / "assets" / "evolution-1bit.png", "image/png"),
