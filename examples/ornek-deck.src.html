@@ -22,20 +22,6 @@
 
 /* === 3. DECK'E ÖZEL ===================================================== */
 
-/* Giriş animasyonu. Sistemin tek hareketi budur; slayt görünür olunca
-   içerik kademeli belirir. */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.slide.visible .reveal { opacity: 1; transform: none; }
-.slide.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
-.slide.visible .reveal:nth-child(2) { transition-delay: 0.12s; }
-.slide.visible .reveal:nth-child(3) { transition-delay: 0.19s; }
-.slide.visible .reveal:nth-child(4) { transition-delay: 0.26s; }
-
 /* Sol alta demirlenen kapak/kapanış bloğu. */
 .anchor-bl {
   position: absolute;

@@ -82,8 +82,16 @@ svg {
     z-index: 1000;
 }
 
-/* 7. Print one fixed-size slide per page */
+/* 7. Print one fixed-size slide per page.
+      @page boyutu verilmezse cikti A4 dikey olur ve 1920x1080 slayt
+      sayfanin kosesine sikisir. Slayt olculerini birebir vererek her
+      sayfayi bir slayta esitliyoruz. */
 @media print {
+    @page {
+        size: 1920px 1080px;
+        margin: 0;
+    }
+
     html,
     body {
         width: 1920px;
