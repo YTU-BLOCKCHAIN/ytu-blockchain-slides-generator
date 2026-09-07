@@ -32,13 +32,14 @@ ornek: brand                      ## Örnek deck
 # Kitin içinde kaynak dosya yoktur: brand.src.css, fontlar ve tools/ burada
 # kalır. Deck yazan kişinin bunlara erişmesi gerekmiyor.
 # -----------------------------------------------------------------------------
-kit: brand                        ## slides deposu için marka kiti üret
+kit: brand galeri                 ## slides deposu için marka kiti üret
 	@rm -rf dist/kit && mkdir -p dist/kit/assets
 	@cp $(BRAND)/brand.css        dist/kit/
 	@cp $(BRAND)/deck.js          dist/kit/
 	@cp $(BRAND)/design.md        dist/kit/
 	@cp viewport-base.css         dist/kit/
 	@cp $(BRAND)/assets/mark.svg  dist/kit/assets/
+	@cp $(BRAND)/components.html  dist/kit/galeri.html
 	@git rev-parse --short HEAD > dist/kit/VERSION
 	@echo "dist/kit/ hazır — $$(du -sh dist/kit | cut -f1)"
 	@ls -1 dist/kit

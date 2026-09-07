@@ -567,6 +567,45 @@
 }
 .sponsors div.lead { grid-column: span 2; grid-row: span 2; font-size: 40px; color: var(--ink); }
 
+/* === ETİKET IZGARASI ======================================================
+   Ekosistem, araç, teknoloji listeleri. Sponsor ızgarasından farkı: kademe
+   yoktur, hepsi eşit ağırlıktadır. Uzun listeleri metin paragrafına çevirmek
+   yerine taranabilir tutar.                                               */
+
+.chips { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+.chips--3 { grid-template-columns: repeat(3, 1fr); }
+.chips div {
+  padding: 20px 22px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--ink);
+}
+.stage--signal .chips div { background: rgba(0, 0, 0, 0.14); }
+
+/* === ÖNE ÇIKAN KURUM ======================================================
+   Tek bir destekçi, ana sponsor ya da ortak. Sponsor ızgarasındaki
+   hücrelerden ayrılır çünkü tek başına ve vurgulu durur.                  */
+
+.feature { border-left: 4px solid var(--signal); padding-left: 28px; }
+.feature b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 72px;
+  line-height: 1;
+  font-weight: 400;
+}
+.feature span {
+  display: block;
+  margin-top: 14px;
+  font-size: var(--t-small);
+  line-height: 1.4;
+  color: var(--ink-dim);
+}
+.stage--signal .feature { border-left-color: var(--ink); }
+
 /* === BAR GRAFİK ===========================================================
    Barlar blok ızgarasına oturur; yükseklik 24px'in katı olacak şekilde
    yuvarlanır. Böylece grafik de logonun modülünü tekrarlar.              */
@@ -678,6 +717,64 @@
 
 /* Hazır dither dosyası yoksa çalışma anında üretmek için `ditherCanvas()`
    fonksiyonu html-template.md içinde tanımlı. */
+
+/* === YERLEŞİM ============================================================
+   Arketiplerin gövde düzenleri. Bunlar sistemin parçasıdır: deck yazan kişi
+   `style="position:absolute;left:var(--margin)..."` yazmak zorunda kalmasın,
+   sınıf seçsin. Inline stil yazılmadığı sürece hiçbir deck tasarımdan
+   sapamaz.                                                                */
+
+/* Sol alta demirlenmiş blok — kapak arketipi. */
+.anchor-bl {
+  position: absolute;
+  left: var(--margin);
+  bottom: calc(var(--margin) + 96px);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Dikey ortalanmış blok — bölüm ayracı ve kapanış arketipi. */
+.anchor-mid {
+  position: absolute;
+  left: var(--margin);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* Sol altta sunan bilgisi — sayfa numarasıyla aynı hatta oturur. */
+.byline {
+  position: absolute;
+  left: var(--margin);
+  bottom: calc(var(--margin) - 12px);
+  color: var(--ink-faint);
+}
+
+/* Bölüm ayracındaki dev numara. */
+.chapter-num {
+  font-family: var(--font-display);
+  font-size: 180px;
+  line-height: 0.8;
+  opacity: 0.42;
+}
+
+/* İki sütunlu gövde. --image: sağda görsel; --even: eşit iki sütun. */
+.split { display: grid; gap: 80px; align-items: center; }
+.split--image { grid-template-columns: 1fr 620px; }
+.split--even { grid-template-columns: 1fr 1fr; align-items: stretch; }
+
+/* Dikey yığın — başlık + metin blokları. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+}
 
 /* === GİRİŞ ANİMASYONU =====================================================
    Sistemin tek hareketi. Slayt görünür olunca içerik kademeli belirir.
