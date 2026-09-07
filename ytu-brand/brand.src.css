@@ -424,6 +424,13 @@
 }
 .term dd { margin: 0; color: var(--ink-dim); font-size: var(--t-small); }
 
+/* Vurgulanan terim. Sistemin diğer bileşenlerindeki `.on` / `.hi` grameriyle
+   aynı: bir listede tek bir öğe öne çıkarılır, ötekiler sönük kalmaz. */
+.term.on { border-left-color: var(--signal); }
+.term.on dt { color: var(--signal); }
+.stage--signal .term.on { border-left-color: var(--ink); }
+.stage--signal .term.on dt { color: var(--ink); }
+
 /* === NOT / UYARI ==========================================================
    Üç durum, tek yapı. Renk yerine kenar kalınlığı ve etiket ayırır —
    palette kırmızı/yeşil yok, olsaydı marka dilini bozardı.               */
